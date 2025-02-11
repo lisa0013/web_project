@@ -1,0 +1,17 @@
+.container {
+  width: 700px;
+  display: flex;
+  background-color: #eee;
+  border: 1px solid #222;
+  margin: 30px;
+}
+
+#revenue{
+  justify-content: center;
+}
+#total expenditure{
+  justify-content: center;
+}
+#remaining amount{
+  justify-content: center;
+}
