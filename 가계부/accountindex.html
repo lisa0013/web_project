@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>생활비 관리</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .summary-card {
+            transition: transform 0.2s;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .transaction-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .transaction-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .nav-tabs .nav-link.active {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-wallet"></i> 생활비 관리
+            </a>
+            <button class="btn btn-outline-light" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i> 로그아웃
+            </button>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- 요약 카드 -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card summary-card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">총 수입</h5>
+                        <h3 class="card-text" id="totalIncome">0원</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card summary-card bg-danger text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">총 지출</h5>
+                        <h3 class="card-text" id="totalExpense">0원</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card summary-card bg-info text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">남은 금액</h5>
+                        <h3 class="card-text" id="balance">0원</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 탭 메뉴 -->
+        <ul class="nav nav-tabs mb-4" id="transactionTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button">
+                    전체 내역
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="income-tab" data-bs-toggle="tab" data-bs-target="#income" type="button">
+                    수입 관리
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="expense-tab" data-bs-toggle="tab" data-bs-target="#expense" type="button">
+                    지출 관리
+                </button>
+            </li>
+        </ul>
+
+        <!-- 탭 내용 -->
+        <div class="tab-content">
+            <!-- 전체 내역 탭 -->
+            <div class="tab-pane fade show active" id="all">
+                <div class="transaction-section">
+                    <h4 class="mb-3">전체 거래 내역</h4>
+                    <div class="transaction-list" id="allTransactionList"></div>
+                </div>
+            </div>
+
+            <!-- 수입 관리 탭 -->
+            <div class="tab-pane fade" id="income">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="transaction-section">
+                            <h4 class="mb-3">수입 입력</h4>
+                            <form id="incomeForm">
+                                <div class="mb-3">
+                                    <label class="form-label">카테고리</label>
+                                    <select class="form-select" id="incomeCategory" required>
+                                        <option value="">카테고리 선택</option>
+                                        <option value="급여">급여</option>
+                                        <option value="용돈">용돈</option>
+                                        <option value="기타 수입">기타 수입</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">금액</label>
+                                    <input type="number" class="form-control" id="incomeAmount" required min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">날짜</label>
+                                    <input type="date" class="form-control" id="incomeDate" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">메모</label>
+                                    <input type="text" class="form-control" id="incomeMemo">
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">
+                                    <i class="fas fa-plus"></i> 수입 추가
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-8">
+                        <div class="transaction-section">
+                            <h4 class="mb-3">수입 내역</h4>
+                            <div class="transaction-list" id="incomeTransactionList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 지출 관리 탭 -->
+            <div class="tab-pane fade" id="expense">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="transaction-section">
+                            <h4 class="mb-3">지출 입력</h4>
+                            <form id="expenseForm">
+                                <div class="mb-3">
+                                    <label class="form-label">카테고리</label>
+                                    <select class="form-select" id="expenseCategory" required>
+                                        <option value="">카테고리 선택</option>
+                                        <option value="식비">식비</option>
+                                        <option value="교통비">교통비</option>
+                                        <option value="주거비">주거비</option>
+                                        <option value="통신비">통신비</option>
+                                        <option value="문화생활">문화생활</option>
+                                        <option value="의료비">의료비</option>
+                                        <option value="교육비">교육비</option>
+                                        <option value="기타">기타</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">금액</label>
+                                    <input type="number" class="form-control" id="expenseAmount" required min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">날짜</label>
+                                    <input type="date" class="form-control" id="expenseDate" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">메모</label>
+                                    <input type="text" class="form-control" id="expenseMemo">
+                                </div>
+                                <button type="submit" class="btn btn-danger w-100">
+                                    <i class="fas fa-plus"></i> 지출 추가
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="transaction-section">
+                            <h4 class="mb-3">지출 내역</h4>
+                            <div class="transaction-list" id="expenseTransactionList"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        let imPort = [];
+        let sal = document.querySelector('#incomeAmount').value
+        let come = document.querySelector('#incomeCategory').value
+        let dat = document.querySelector('#incomeDate').value
+        let a = {
+            salary: 10000,
+            gubun: '급여',
+            date: '2025-02-01'
+        };
+
+        let b = {
+            salary: 2000,
+            gubun: '식비',
+            date: '2025-02-02'
+        };
+
+        let c = {
+            salary: sal,
+            gubun: come,
+            date: dat
+        };
+
+        imPort.push(a);
+        imPort.push(b);
+
+        console.log( imPort[0]);
+
+
+        let str = "";
+        for (let i = 0; imPort.length; i++) {
+            str += "<div class = 'im'>"
+            str += "<div>"    
+            str += imPort[i].gubun
+            str += imPort[i].date
+            str += "</div>"
+            str += "<p>" + imPort[i].salary + "</p>"
+            str += "</div>"
+        }
+        document.querySelector('#incomeTransactionList').innerHTML = str;
+    </script>
+
+</body>
+
+</html>
