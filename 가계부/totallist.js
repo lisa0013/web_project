@@ -1,6 +1,6 @@
 // 총합 계산/
 function totalsum() {
-  let str = "";
+  
   let sumin = 0;
   let sumout = 0;
 
@@ -16,9 +16,9 @@ function totalsum() {
     }
   }
   
-  document.querySelector('#totalIncome').innerText = sumin;
-  document.querySelector('#totalExpense').innerText = sumout;
-  document.querySelector('#balance').innerText = sumin - sumout;
+  document.querySelector('#totalIncome').innerText = sumin.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  document.querySelector('#totalExpense').innerText = sumout.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  document.querySelector('#balance').innerText = (sumin - sumout).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 }
 
 

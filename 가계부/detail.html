@@ -128,7 +128,7 @@
                 str += "</div>"
                 str += "<div class = 'd-flex align-items-center'>"
                 str += "<span class = 'me-3'>" + total[i].amount + "</span>"
-                str += "<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(1739430968787)'>"
+                str += `<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(${total[i].id})'>`
                 str += "<i class = 'fas fa-trash'>" + "</i>"
                 str += "</button>"
                 str += "</div>"
@@ -141,7 +141,7 @@
                 str += "</div>"
                 str += "<div class = 'd-flex align-items-center'>"
                 str += "<span class = 'me-3'>" + total[i].amount + "</span>"
-                str += "<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(1739430968787)'>"
+                str += `<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(${total[i].id})'>`
                 str += "<i class = 'fas fa-trash'>" + "</i>"
                 str += "</button>"
                 str += "</div>"
@@ -152,42 +152,6 @@
         document.querySelector('#allTransactionList').innerHTML = str;
         totalsum();
 
-        // 수입 추가 버튼 누르는 이벤트
-        // document.querySelector('#income_btn').addEventListener('click', function () {
-
-        //     let amount = document.querySelector('#incomeAmount').value // 금액        
-        //     let category = document.querySelector('#incomeCategory').value // 카테고리
-        //     let date = document.querySelector('#incomeDate').value // 날짜
-        //     let memo = document.querySelector('#incomeMemo').value // 메모
-        //     let item = {
-        //         divide: "1",
-        //         amount: amount,
-        //         category: category,
-        //         date: date,
-        //         memo: memo
-        //     };
-
-        //     total.push(item);
-        //     localStorage.setItem("total", JSON.stringify(total));
-
-
-        //     let str = "";
-        //     for (let i = 0; i < total.length; i++) {
-        //         if (total[i].divide === "1") {
-        //             str += "<div class = 'im'>"
-        //             str += "<div>"
-        //             str += total[i].category
-        //             str += total[i].amount
-        //             str += "</div>"
-        //             str += "<div>"
-        //             str += total[i].date
-        //             str += total[i].memo
-        //             str += "</div>"
-        //             str += "</div>"
-        //         }
-        //     }
-        //     document.querySelector('#incomeTransactionList').innerHTML = str;
-        // });
 
         function detailbtn() {
             location.href = "detail.html";
@@ -207,6 +171,50 @@
 
         function colordivide() {
             
+        }
+
+        function deleteTransaction(id) {
+            for (let i = 0; i < total.length; i++) {
+                if(total[i].id == id){
+                    total.splice(i, 1);
+                }
+            } 
+            debugger;
+            localStorage.setItem("total",  JSON.stringify(total));
+
+            //alert('경고!!!');
+            let str = "";
+            for (let i = 0; i < total.length; i++) {
+                if (total[i].divide === "1") {
+                    str += "<div class = 'alert alert-success d-flex justify-content-between align-items-center'>"
+                    str += "<div>"
+                    str += "<strong>" + total[i].category + "</strong><br>"
+                    str += "<small>" + total[i].date + "</small>"
+                    str += "</div>"
+                    str += "<div class = 'd-flex align-items-center'>"
+                    str += "<span class = 'me-3'>" + total[i].amount + "</span>"
+                    str += `<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(${total[i].id})'>`
+                    str += "<i class = 'fas fa-trash'>" + "</i>"
+                    str += "</button>"
+                    str += "</div>"
+                    str += "</div>"
+                } else if (total[i].divide === "0") {
+                    str += "<div class = 'alert alert-danger d-flex justify-content-between align-items-center'>"
+                    str += "<div>"
+                    str += "<strong>" + total[i].category + "</strong><br>"
+                    str += "<small>" + total[i].date + "</small>"
+                    str += "</div>"
+                    str += "<div class = 'd-flex align-items-center'>"
+                    str += "<span class = 'me-3'>" + total[i].amount + "</span>"
+                    str += `<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(${total[i].id})'>`
+                    str += "<i class = 'fas fa-trash'>" + "</i>"
+                    str += "</button>"
+                    str += "</div>"
+                    str += "</div>"
+                }
+            }
+            document.querySelector('#allTransactionList').innerHTML = str;
+            totalsum();
         }
     </script>
 

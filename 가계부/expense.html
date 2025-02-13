@@ -154,7 +154,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="totallist.js"></script>
     <script>
-        //localStorage.clear();
+        // localStorage.clear();
         if (localStorage.getItem("total") == null) {
             localStorage.setItem("total", JSON.stringify([])); // stringify(): 객체를 매개변수로서 수용하고, JSON 문자열 형태로 변환
         }
@@ -169,13 +169,27 @@
             let category = document.querySelector('#expenseCategory').value // 카테고리
             let date = document.querySelector('#expenseDate').value // 날짜
             let memo = document.querySelector('#expenseMemo').value // 메모
+            let max  = -1;
+            for(var i = 0 ; i < total.length ; i++){
+                if( total[i].id >= max ){
+                    max = total[i].id + 1;
+                }
+            }
+            
+            if(total.length == 0){
+                max = 0;
+            }
+
+
             let item = {
+                id: max, 
                 divide: "0",
                 amount: amount,
                 category: category,
                 date: date,
                 memo: memo
             };
+            
 
             total.push(item);
             localStorage.setItem("total", JSON.stringify(total));
@@ -213,7 +227,7 @@
                     str += "</div>"
                     str += "<div class = 'd-flex align-items-center'>"
                     str += "<span class = 'me-3'>" + total[i].amount + "</span>"
-                    str += "<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(1739430968787)'>"
+                    str += `<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(${total[i].id})'>`
                     str += "<i class = 'fas fa-trash'>" + "</i>"
                     str += "</button>"
                     str += "</div>"
