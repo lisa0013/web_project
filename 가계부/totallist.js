@@ -15,10 +15,10 @@ function totalsum() {
       sumout += parseInt(total[i].amount);
     }
   }
-  
-  document.querySelector('#totalIncome').innerText = sumin.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-  document.querySelector('#totalExpense').innerText = sumout.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-  document.querySelector('#balance').innerText = (sumin - sumout).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  //document.querySelector('#totalIncome').innerText = "₩ " + sumin.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+  document.querySelector('#totalIncome').innerText = "₩ " + sumin.toLocaleString();
+  document.querySelector('#totalExpense').innerText = "₩ " + sumout.toLocaleString();
+  document.querySelector('#balance').innerText = "₩ " + (sumin - sumout).toLocaleString();
 }
 
 

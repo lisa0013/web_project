@@ -8,50 +8,420 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        :root {
+            --primary-color: #2B3441;
+            --secondary-color: #3E4B5B;
+            --success-color: #2E7D32;
+            --danger-color: #C62828;
+            --info-color: #1565C0;
+            --text-color: #2B3441;
+            --border-radius: 4px;
+            --box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        /* 레프트 메뉴 스타일 수정 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 250px;
+            background: #1a237e;
+            /* 더 진한 파란색으로 변경 */
+            color: #E2E8F0;
+            z-index: 1000;
+            transition: transform 0.3s ease-in-out;
+            box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar-header {
+            padding: 1.25rem 1.5rem;
+            background: rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-brand {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-brand:hover {
+            color: white;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .menu-item {
+            padding: 0.875rem 1.5rem;
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-left-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left-color: #64B5F6;
+        }
+
+        .menu-item i {
+            width: 20px;
+            margin-right: 12px;
+            font-size: 1rem;
+        }
+
+        /* 햄버거 버튼 스타일 수정 */
+        .top-nav {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        #sidebarToggle {
+            color: #475569;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            margin: 0;
+        }
+
+        #sidebarToggle:hover {
+            background: #F1F5F9;
+            color: #1a237e;
+        }
+
+        /* 메인 컨텐츠 영역 */
+        .main-content {
+            margin-left: 250px;
+            padding: 20px;
+            min-height: calc(100vh - 200px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 요약 카드 스타일 수정 */
         .summary-card {
-            transition: transform 0.2s;
+            background: white;
+            border: none !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+        }
+
+        .summary-card.income-card::before {
+            background-color: var(--success-color);
+        }
+
+        .summary-card.expense-card::before {
+            background-color: var(--danger-color);
+        }
+
+        .summary-card.balance-card::before {
+            background-color: var(--info-color);
         }
 
         .summary-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
+        .summary-card .card-body {
+            padding: 1.5rem;
+        }
+
+        .summary-card .card-title {
+            font-size: 0.875rem;
+            color: #64748B;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .summary-card .card-text {
+            font-family: 'Roboto Mono', monospace;
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        .summary-card.income-card .card-text {
+            color: var(--success-color);
+        }
+
+        .summary-card.expense-card .card-text {
+            color: var(--danger-color);
+        }
+
+        .summary-card.balance-card .card-text {
+            color: var(--info-color);
+        }
+
+        /* 푸터 스타일 */
+        .footer {
+            height: 200px;
+            margin-top: auto;
+            padding: 1rem 0;
+            border-top: 1px solid var(--border-color);
+            color: #64748B;
+            font-size: 0.875rem;
+            background-color: white;
+        }
+
+        .footer-content {
+            height: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .footer-links a {
+            color: #64748B;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* 반응형 처리 */
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-250px);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .sidebar.show {
+                transform: translateX(0);
+            }
+
+            .footer {
+                height: auto;
+                min-height: 200px;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .footer-links {
+                display: flex;
+                gap: 1rem;
+            }
+
+            .footer-links a {
+                margin-left: 0;
+            }
+        }
+
+        /* 데스크톱에서 토글 시 */
+        body.sidebar-collapsed .sidebar {
+            transform: translateX(-250px);
+        }
+
+        body.sidebar-collapsed .main-content {
+            margin-left: 0;
+        }
+
+        /* 거래 내역 테이블 스타일 */
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.813rem;
+        }
+
+        .transaction-table th {
+            background: #F8FAFC;
+            padding: 12px 16px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .transaction-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: #1E293B;
+        }
+
+        .transaction-table tr:hover {
+            background-color: #F8FAFC;
+        }
+
+        .amount {
+            font-family: 'Roboto Mono', monospace;
+            text-align: right;
+            font-weight: 500;
+        }
+
+        .amount.income {
+            color: var(--success-color);
+        }
+
+        .amount.expense {
+            color: var(--danger-color);
+        }
+
+        .date-column {
+            color: #64748B;
+            width: 100px;
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: #F1F5F9;
+            color: #475569;
+        }
+
+        /* 입력 폼 스타일 */
         .transaction-section {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 1.5rem;
+        }
+
+        .transaction-section h4 {
+            color: var(--text-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            font-size: 0.813rem;
+            font-weight: 500;
+            color: #475569;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control,
+        .form-select {
+            font-size: 0.875rem;
+            padding: 0.5rem 0.75rem;
+            border-color: #E2E8F0;
+            border-radius: var(--border-radius);
+        }
+
+        .form-control:focus,
+        .form-select:focus {
+            border-color: #94A3B8;
+            box-shadow: 0 0 0 0.2rem rgba(148, 163, 184, 0.15);
+        }
+
+        .btn {
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: var(--border-radius);
         }
 
         .transaction-list {
-            max-height: 400px;
+            max-height: 500px;
             overflow-y: auto;
         }
 
-        .nav-tabs .nav-link.active {
-            font-weight: bold;
+        .transaction-list::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .transaction-list::-webkit-scrollbar-track {
+            background: #F1F5F9;
+            border-radius: 3px;
+        }
+
+        .transaction-list::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 3px;
+        }
+
+        .transaction-list::-webkit-scrollbar-thumb:hover {
+            background: #94A3B8;
         }
     </style>
 </head>
 
-<body class="bg-light">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="#" onclick="loginbtn()">
+<body>
+    <!-- 레프트 메뉴 -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="sidebar-brand">
                 <i class="fas fa-wallet"></i> 생활비 관리
             </a>
-            <button class="btn btn-outline-light" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i> 로그아웃
+        </div>
+        <div class="sidebar-menu">
+            <a href="detail.html" class="menu-item" id="menu-detail">
+                <i class="fas fa-list"></i> 전체 내역
+            </a>
+            <a href="income.html" class="menu-item" id="menu-income">
+                <i class="fas fa-plus-circle"></i> 수입 관리
+            </a>
+            <a href="expense.html" class="menu-item" id="menu-expense">
+                <i class="fas fa-minus-circle"></i> 지출 관리
+            </a>
+        </div>
+    </div>
+
+
+    <!-- 메인 컨텐츠 영역 -->
+    <div class="main-content">
+        <div class="top-nav">
+            <button class="btn btn-link" id="sidebarToggle">
+                <i class="fas fa-bars"></i>
             </button>
         </div>
-    </nav>
 
-    <div class="container mt-4">
         <!-- 요약 카드 -->
         <div class="row mb-4">
             <div class="col-md-4">
-                <div class="card summary-card bg-success text-white">
+                <div class="card summary-card income-card">
                     <div class="card-body">
                         <h5 class="card-title">총 수입</h5>
                         <h3 class="card-text" id="totalIncome">0원</h3>
@@ -59,7 +429,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card summary-card bg-danger text-white">
+                <div class="card summary-card expense-card">
                     <div class="card-body">
                         <h5 class="card-title">총 지출</h5>
                         <h3 class="card-text" id="totalExpense">0원</h3>
@@ -67,7 +437,7 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card summary-card bg-info text-white">
+                <div class="card summary-card balance-card">
                     <div class="card-body">
                         <h5 class="card-title">남은 금액</h5>
                         <h3 class="card-text" id="balance">0원</h3>
@@ -76,82 +446,85 @@
             </div>
         </div>
 
-        <!-- 탭 메뉴 -->
-        <ul class="nav nav-tabs mb-4" id="transactionTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="all-tab" onclick="detailbtn()">
-                    전체 내역
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link  active" id="income-tab" onclick="incomebtn()">
-                    수입 관리
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="expense-tab" onclick="expensebtn()">
-                    지출 관리
-                </button>
-            </li>
-        </ul>
 
-        <!-- 탭 내용 -->
-        <div class="">
+        <!-- 메인 컨텐츠 -->
+        <div id="mainContent">
+            <!-- 수입 관리 페이지 -->
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="transaction-section">
+                        <h4 class="mb-3">수입 입력</h4>
+                        <form id="incomeForm"></form>
 
-
-            <!-- 수입 관리 탭 -->
-            <div class="tab-pane" id="income">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="transaction-section">
-                            <h4 class="mb-3">수입 입력</h4>
-
-                            <div class="mb-3">
-                                <label class="form-label">카테고리</label>
-                                <select class="form-select" id="incomeCategory" required>
-                                    <option value="">카테고리 선택</option>
-                                    <option value="급여">급여</option>
-                                    <option value="용돈">용돈</option>
-                                    <option value="기타 수입">기타 수입</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">금액</label>
-                                <input type="number" class="form-control" id="incomeAmount" required min="0">
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">날짜</label>
-                                <input type="date" class="form-control" id="incomeDate" required>
-                            </div>
-                            <div class="mb-3">
-                                <label class="form-label">메모</label>
-                                <input type="text" class="form-control" id="incomeMemo">
-                            </div>
-                            <button id="income_btn" class="btn btn-success w-100">
-                                <i class="fas fa-plus"></i> 수입 추가
-                            </button>
-
+                        <div class="mb-3">
+                            <label class="form-label">카테고리</label>
+                            <select class="form-select" id="incomeCategory" required>
+                                <option value="">카테고리 선택</option>
+                                <option value="급여">급여</option>
+                                <option value="용돈">용돈</option>
+                                <option value="기타 수입">기타 수입</option>
+                            </select>
                         </div>
+                        <div class="mb-3">
+                            <label class="form-label">금액</label>
+                            <input type="number" class="form-control" id="incomeAmount" required min="0">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">날짜</label>
+                            <input type="date" class="form-control" id="incomeDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">메모</label>
+                            <input type="text" class="form-control" id="incomeMemo">
+                        </div>
+                        <button id="income_btn" class="btn btn-success w-100">
+                            <i class="fas fa-plus"></i> 수입 추가
+                        </button>
+
+                        </form>
                     </div>
+                </div>
 
 
-                    <div class="col-md-8">
-                        <div class="transaction-section">
-                            <h4 class="mb-3">수입 내역</h4>
-                            <div class="transaction-list" id="incomeTransactionList"></div>
+                <div class="col-md-8">
+                    <div class="transaction-section">
+                        <h4 class="mb-3">수입 내역</h4>
+                        <div class="transaction-list" id="incomeTransactionList">
+
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </div>
+
+        <!-- 푸터 -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-copyright">
+                    © 2024 생활비 관리 시스템. All rights reserved.
+                </div>
+                <div class="footer-links">
+                    <a href="#" target="_blank">이용약관</a>
+                    <a href="#" target="_blank">개인정보처리방침</a>
+                    <a href="#" target="_blank">고객센터</a>
+                    <a href="#" target="_blank">문의하기</a>
+                </div>
+            </div>
+        </footer>
     </div>
 
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // 사이드바 토글 버튼
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            document.body.classList.toggle('sidebar-collapsed');
+        });
+    </script>
+
     <script src="totallist.js"></script>
     <script>
-       // localStorage.clear();
+        // localStorage.clear();
         if (localStorage.getItem("total") == null) {
             localStorage.setItem("total", JSON.stringify([])); // stringify(): 객체를 매개변수로서 수용하고, JSON 문자열 형태로 변환
         }
@@ -171,13 +544,13 @@
             let max = -1;
 
             debugger;
-            for(var i = 0 ; i < total.length ; i++){
-                if( total[i].id >= max ){
+            for (var i = 0; i < total.length; i++) {
+                if (total[i].id >= max) {
                     max = total[i].id + 1;
                 }
             }
-            
-            if(total.length == 0){
+
+            if (total.length == 0) {
                 max = 0;
             }
 
@@ -190,7 +563,7 @@
                 memo: memo
             };
 
-            total.push(item);
+            total.unshift(item);
             localStorage.setItem("total", JSON.stringify(total));
 
             draw();
@@ -227,13 +600,46 @@
                     str += "<small>" + total[i].date + "</small>"
                     str += "</div>"
                     str += "<div class = 'd-flex align-items-center'>"
-                    str += "<span class = 'me-3'>" + total[i].amount + "</span>"
-                    str += `<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(${total[i].id})'>`
+                    str += "<span class = 'me-3'>" + parseInt(total[i].amount).toLocaleString() + "</span>"
+                    str +=
+                        `<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(${total[i].id})'>`
                     str += "<i class = 'fas fa-trash'>" + "</i>"
                     str += "</button>"
                     str += "</div>"
                     str += "</div>"
 
+                }
+            }
+            document.querySelector('#incomeTransactionList').innerHTML = str;
+            totalsum();
+        }
+
+        function deleteTransaction(id) {
+            for (let i = 0; i < total.length; i++) {
+                if (total[i].id == id) {
+                    total.splice(i, 1);
+                }
+            }
+            // debugger;
+            localStorage.setItem("total", JSON.stringify(total));
+
+            // alert('경고!!!');
+            let str = "";
+            for (let i = 0; i < total.length; i++) {
+                if (total[i].divide === "1") {
+                    str += "<div class = 'alert alert-success d-flex justify-content-between align-items-center'>"
+                    str += "<div>"
+                    str += "<strong>" + total[i].category + "</strong><br>"
+                    str += "<small>" + total[i].date + "</small>"
+                    str += "</div>"
+                    str += "<div class = 'd-flex align-items-center'>"
+                    str += "<span class = 'me-3'>" + parseInt(total[i].amount).toLocaleString() + "</span>"
+                    str +=
+                        `<button class = 'btn btn-smbtn-outoine-danger' onclick = 'deleteTransaction(${total[i].id})'>`
+                    str += "<i class = 'fas fa-trash'>" + "</i>"
+                    str += "</button>"
+                    str += "</div>"
+                    str += "</div>"
                 }
             }
             document.querySelector('#incomeTransactionList').innerHTML = str;
